@@ -36,7 +36,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2 # or your project Ruby version
+          ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Install dependencies
