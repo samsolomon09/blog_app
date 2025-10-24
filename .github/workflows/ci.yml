@@ -19,8 +19,12 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Scan for common Rails security vulnerabilities using static analysis
+      - name: Fix permissions
+        run: chmod +x bin/brakeman
+
+      - name: Run Brakeman
         run: bin/brakeman --no-pager
+
 
   scan_js:
     runs-on: ubuntu-latest
