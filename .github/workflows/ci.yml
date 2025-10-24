@@ -36,13 +36,13 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: 3.2 # or your project Ruby version
           bundler-cache: true
-          
+
       - name: Install dependencies
         run: bundle install
 
-      - name: Scan for security vulnerabilities in JavaScript dependencies
+      - name: Run importmap audit
         run: bundle exec importmap audit
 
   lint:
