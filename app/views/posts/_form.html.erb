@@ -1,0 +1,48 @@
+<%= form_with(model: post) do |form| %>
+  <% if post.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+      <ul>
+        <% post.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="d-flex flex-column align-items-center" style="min-height: 100vh;">
+    <div class="card">
+      <div class="card-header">
+        <%# <b>Title: </b><%= @post.title%> 
+      </div>
+      <div class="card-body">
+        <blockquote class="blockquote mb-0">
+          <div>
+            <%= form.label :title, style: "display: block" %>
+            <%= form.text_field :title, maxlength: 255, class: "form-control" %>
+          </div>
+
+          <div>
+            <%= form.label :body, style: "display: block" %>
+            <%= form.text_area :body, style: "height: 200px;" , class: "form-control"  %>
+          </div><br>
+
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <div>
+              <%= form.submit post.new_record? ? "Create Post" : "Update Post",
+                class: "btn btn-dark"%>
+              <%if(post.new_record?)%>
+                <%= link_to "Back to posts", posts_path, class: "btn btn-dark" %>
+              <%else%>
+                <%= link_to "Show this post", @post, class: "btn btn-dark" %> 
+                <%= link_to "Back to posts", posts_path, class: "btn btn-dark" %>
+              <%end%>
+            </div>
+          </div>
+        </blockquote>
+      </div>
+      
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,8 @@
+.card{
+    width: 50% !important;
+}
+
+.btn-group{
+    float: right !important;
+    gap: 10px;
+}

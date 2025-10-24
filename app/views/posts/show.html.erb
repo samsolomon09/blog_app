@@ -1,0 +1,25 @@
+<p style="color: green"><%= notice %></p>
+
+<%# <%= render @post %> 
+<div class="d-flex flex-column align-items-center" style="min-height: 100vh;">
+  <div class="card">
+    <div class="card-header">
+      <b>Title: </b><%= @post.title%>
+    </div>
+    <div class="card-body">
+      <blockquote class="blockquote mb-0">
+        <b>Description: </b>
+        <p><%= truncate(@post.body, length: 100, omission: '... [Read more]') %></p>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <%= link_to "Edit this post", edit_post_path(@post), class: "btn btn-dark" %>
+          <%= link_to "Back to posts", posts_path, class: "btn btn-dark" %>
+          <%# <%= button_to "Destroy this post", @post, method: :delete, class: "btn btn-dark" %> 
+          <%= button_to "Delete the post", @post,
+              method: :delete,
+              data: { confirm: "Are you sure you want to delete this post?" },
+              class: "btn btn-dark" %>
+        </div>
+      </blockquote>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
+
+ .icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    vertical-align: middle;
+    margin: 0 10px;
+  }
+
+ .icon:hover {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination .page-link {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin: 0 3px;
+    padding: 5px 10px;
+    color: #333;
+  }
+  
+  .pagination .active .page-link {
+    background-color: #007bff;
+    color: white;
+  }
