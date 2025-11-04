@@ -66,38 +66,60 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # services:
-    #  redis:
-    #    image: redis
-    #    ports:
-    #      - 6379:6379
-    #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
-    steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config google-chrome-stable
-
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Ensure bin scripts are executable
-        run: chmod +x bin/*
-        
-      - name: Run tests
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
         env:
-          RAILS_ENV: test
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: blog_app_test
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
+    steps:
+    - name: Install packages
+      run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config google-chrome-stable
+  
+    - name: Checkout code
+      uses: actions/checkout@v4
+  
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: .ruby-version
+        bundler-cache: true
+  
+    - name: Ensure bin scripts are executable
+      run: chmod +x bin/*
+  
+    - name: Wait for MySQL
+      run: |
+        echo "Waiting for MySQL to be ready..."
+        until mysqladmin ping -h127.0.0.1 -uroot -proot --silent; do
+          sleep 2
+        done
+  
+    - name: Prepare test database
+      env:
+        RAILS_ENV: test
+        DATABASE_URL: mysql2://root:root@127.0.0.1:3306/blog_app_test
+      run: |
+        bin/rails db:create db:schema:load
+  
+    - name: Run tests
+      env:
+        RAILS_ENV: test
+        DATABASE_URL: mysql2://root:root@127.0.0.1:3306/blog_app_test
+      run: bin/rails test test:system
+  
+    - name: Keep screenshots from failed system tests
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: screenshots
+        path: ${{ github.workspace }}/tmp/screenshots
+        if-no-files-found: ignore
