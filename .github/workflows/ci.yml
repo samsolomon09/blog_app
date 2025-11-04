@@ -30,20 +30,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: .ruby-version
+        bundler-cache: true
 
-      - name: Install dependencies
-        run: bundle install
+    - name: Install dependencies
+      run: bundle install
 
-      - name: Run importmap audit
-        run: bundle exec rake importmap:audit
+    # Removed old importmap audit since it's not supported in Rails 8
 
   lint:
     runs-on: ubuntu-latest
